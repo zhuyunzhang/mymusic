@@ -8,7 +8,7 @@ import {
   Alert,
   FlatList,
 } from 'react-native';
-import {ActivityIndicator, Carousel, Icon, SearchBar,Toast} from '@ant-design/react-native';
+import {ActivityIndicator, Carousel, Icon, SearchBar} from '@ant-design/react-native';
 import {
   Container,
   Header,
@@ -17,6 +17,7 @@ import {
   Content,
   Subtitle,
 } from 'native-base';
+import Toast from 'react-native-root-toast'
 import SplashScreen from 'react-native-splash-screen';
 import IconMenu from '../widgets/IconMenu';
 import * as action from '../../actions';
@@ -77,13 +78,36 @@ class deal extends Component {
     ),
   };
   onPressPersonFM() {
-    Toast.success('后续开发中', 1);
+    // let url = 'http://www.baidu.com';
+    // Linking.openURL(url)
+    Toast.show('模块正在开发中', {
+      duration: 1000, // toast显示时长
+      position: height/3, // toast位置
+      shadow: true, // toast是否出现阴影
+      animation: true, // toast显示/隐藏的时候是否需要使用动画过渡
+      hideOnPress: true, // 是否可以通过点击事件对toast进行隐藏
+      delay: 0, // toast显示的延时
+    });
   }
   onPressMusicRank() {
-    Toast.success('后续开发中', 1);
+    Toast.show('模块正在开发中', {
+      duration: 1000, // toast显示时长
+      position: height/3, // toast位置
+      shadow: true, // toast是否出现阴影
+      animation: true, // toast显示/隐藏的时候是否需要使用动画过渡
+      hideOnPress: true, // 是否可以通过点击事件对toast进行隐藏
+      delay: 0, // toast显示的延时
+    });
   }
   onPressHotMusic() {
-    Toast.success('后续开发中', 1);
+    Toast.show('模块正在开发中', {
+      duration: 1000, // toast显示时长
+      position: height/3, // toast位置
+      shadow: true, // toast是否出现阴影
+      animation: true, // toast显示/隐藏的时候是否需要使用动画过渡
+      hideOnPress: true, // 是否可以通过点击事件对toast进行隐藏
+      delay: 0, // toast显示的延时
+    });
   }
   onChange = value => {
     this.setState({value});
@@ -237,7 +261,9 @@ class deal extends Component {
     );
   }
 }
-
+// export default () => (
+//
+// );
 export default connect(
   state => ({
     state: state.user,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Dimensions, Text, Image} from 'react-native';
+import {View, Dimensions, Text, Alert} from 'react-native';
 import {Icon as Icons}  from '@ant-design/react-native';
 import SplashScreen from 'react-native-splash-screen';
 import * as action from '../../actions';
@@ -41,7 +41,9 @@ class task extends Component {
     };
     // this.navigation = props.navigation;
   }
-
+  onPressSelect(){
+    Alert.alert("=======>>>")
+  }
   render() {
     const {actions, state, navigation} = this.props;
     const uri = "https://cdn2.jianshu.io/assets/default_avatar/2-9636b13945b9ccf345bc98d0d81074eb.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240";
@@ -49,18 +51,31 @@ class task extends Component {
       <Container>
         <Header style={styles.headertyles}>
           <Left style={{marginLeft:20}}>
-            <Thumbnail square source={{uri: uri}} />
+            {/*<Thumbnail square source={{uri: uri}} />*/}
           </Left>
-          <Body style={{marginLeft:20}}>
-            <Text style={{color:'white'}}>NativeBase</Text>
-            <Text style={{color:'white'}} note>GeekyAnts</Text>
+          <Body style={{marginLeft:55}}>
+            <Button iconLeft >
+              <Icon name='log-in' />
+              <Text style={{color:'white',fontSize:20,marginRight:10}} note>请登录</Text>
+            </Button>
           </Body>
           <Right>
-            <Button iconLeft transparent>
-              <Icon name='cog' />
-            </Button>
           </Right>
         </Header>
+        {/*<Header style={styles.headertyles}>*/}
+        {/*  <Left style={{marginLeft:20}}>*/}
+        {/*    <Thumbnail square source={{uri: uri}} />*/}
+        {/*  </Left>*/}
+        {/*  <Body style={{marginLeft:20}}>*/}
+        {/*    <Text style={{color:'white'}}>NativeBase</Text>*/}
+        {/*    <Text style={{color:'white'}} note>GeekyAnts</Text>*/}
+        {/*  </Body>*/}
+        {/*  <Right>*/}
+        {/*    <Button iconLeft transparent>*/}
+        {/*      <Icon name='cog' />*/}
+        {/*    </Button>*/}
+        {/*  </Right>*/}
+        {/*</Header>*/}
         <Content>
           <Separator style={{height:10}} />
           <ListItem icon>
@@ -170,7 +185,7 @@ class task extends Component {
               </Badge>
             </Right>
           </ListItem>
-          <ListItem icon>
+          <ListItem icon onPress={() => this.onPressSelect()}>
             <Left>
               <Button style={{ backgroundColor: "#FF9501" }}>
                 <Icon active name="information-circle-outline" />
