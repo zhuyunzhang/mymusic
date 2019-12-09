@@ -118,6 +118,7 @@ class Player extends Component {
 
         actions.GetPlaylistdetail( params,(succecd,data)=>{
 
+          console.log(data)
 
           // this.setState({
           //   musicInfo:data.playlist.tracks,
@@ -129,7 +130,7 @@ class Player extends Component {
             const params = {
               id: this.state.musicInfo[0].id,
             }
-            actions.GetMusicUrl(params)
+            actions.GetMusicUrl(params);
             // mockData=this.state.musicInfo;
             // showlyics=this.state.showlyic
             this.setState({

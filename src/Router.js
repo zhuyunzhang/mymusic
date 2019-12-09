@@ -6,6 +6,10 @@ import {createStackNavigator} from 'react-navigation-stack';
 // 引入页面组件
 import ScreenBottomTab from './Views';
 import Player from './components/player/player';
+import Login from './components/login/login';
+import Register from './components/login/register';
+
+
 
 /**
  * 自定义 StackNavigator，可以选择 screen 进入方式
@@ -41,6 +45,9 @@ const StackModalNavigator = (routeConfigs, navigatorConfig) => {
 const AppNavigator = StackModalNavigator({
   ScreenBottomTab: ScreenBottomTab,
   Player: {screen: Player},
+  Login: {screen: Login},
+  Register: {screen: Register},
+
   //下面几个配置的是测试Navigator不同使用场景用，只需要tab的话，只要ScreenBottomTab: ScreenBottomTab即可
 });
 const App = createAppContainer(AppNavigator)

@@ -35,7 +35,8 @@ const getParamsStr = (params) => {
 };
 
 const request = (url, context, callback) => {
-  const ispost = context && context.method === 'POST';
+  // console.log(url)
+  // const ispost = context && context.method === 'POST';
   // safari 兼容 headers
   // eslint-disable-next-line no-undef
   let myHeaders = new Headers({
@@ -47,21 +48,7 @@ const request = (url, context, callback) => {
   return new Promise(function(resolve, reject) {
     fetch(url, context)
       .then(response => {
-        var status = response.status;
-        if (status >= 200 && status <= 204) {
-          // 请求成功
-          return response.text();
-        } else if (status >= 400 && status <= 400) {
-          response.text().then((text)=>{
-            var msg = JSON.parse(text).msg;
-            if (callback) {
-              callback(false, msg);
-            }
-          });
-        } else {
-          callback(false, status);
-        }
-        return null;
+        return response.text();
       })
       .then(body => {
         if (body) {

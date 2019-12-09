@@ -81,14 +81,49 @@ export const GetPlaylistdetail = ( params, callback) => {
   return (dispatch, getState) => {
     return (async () => {
       try {
-        const data = await api.GetPlaylistdetail(params, callback);
+        await api.GetPlaylistdetail(params, callback);
       } catch (e) {
         console.log('GetPlaylistdetail is error: ' + e);
       }
     })();
   };
 };
-
+//GetCode
+export const GetCode = ( params, callback) => {
+  return (dispatch, getState) => {
+    return (async () => {
+      try {
+         await api.GetCode(params, callback);
+      } catch (e) {
+        console.log('GetCode is error: ' + e);
+      }
+    })();
+  };
+};
+//
+export const GetRegister = ( params, callback) => {
+  return (dispatch, getState) => {
+    return (async () => {
+      try {
+         await api.GetRegister(params, callback);
+      } catch (e) {
+        console.log('GetRegister is error: ' + e);
+      }
+    })();
+  };
+};
+//GetLogin
+export const GetLogin = ( params, callback) => {
+  return (dispatch, getState) => {
+    return (async () => {
+      try {
+        await api.GetLogin(params, callback);
+      } catch (e) {
+        console.log('GetLogin is error: ' + e);
+      }
+    })();
+  };
+};
 //GetMusicUrl
 //歌曲url
 export const GetMusicUrl = (params) => {

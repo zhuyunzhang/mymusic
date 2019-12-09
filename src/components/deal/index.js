@@ -89,6 +89,8 @@ class deal extends Component {
       delay: 0, // toast显示的延时
     });
   }
+
+
   onPressMusicRank() {
     Toast.show('模块正在开发中', {
       duration: 1000, // toast显示时长
@@ -115,7 +117,6 @@ class deal extends Component {
 
   onPressSongSheet(id){
     const{navigation}=this.props;
-
     if(navigation){
       navigation.navigate('Player',{songid:id,id:1})
     }

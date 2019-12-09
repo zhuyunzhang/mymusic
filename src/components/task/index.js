@@ -6,16 +6,33 @@ import * as action from '../../actions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Container, Content, Header, Left, Body, Right, Thumbnail,Icon,Button,ListItem,Separator,Badge,Card,CardItem} from 'native-base';
-import IconMenu from '../widgets/IconMenu';
+import local from '../../store/storage';
 
 const {height,width} = Dimensions.get('window');
 
 class task extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: true,
+      selected: '',
+      loginData:null
+    };
+    // this.navigation = props.navigation;
+  }
   componentDidMount() {
     // 隐藏启动页，如果不设置消失时间，在组件加载完启动页自动隐藏
     setTimeout(() => {
       SplashScreen.hide();
     }, 3000);
+    local.get("loginData").then(ret => {
+      this.setState({
+        loginData:ret
+      })
+    }).catch(err => {
+      console.log(err) //抛出的错误
+    })
+
   }
 
   static headersFind={
@@ -33,28 +50,29 @@ class task extends Component {
     this.setState({value});
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      visible: true,
-      selected: '',
-    };
-    // this.navigation = props.navigation;
-  }
+
   onPressSelect(){
     Alert.alert("=======>>>")
+    const{navigation}=this.props;
+    if(navigation){
+      navigation.navigate('Login',{
+        refresh: function () {
+          this.init();
+        }
+      })
+    }
   }
   render() {
     const {actions, state, navigation} = this.props;
     const uri = "https://cdn2.jianshu.io/assets/default_avatar/2-9636b13945b9ccf345bc98d0d81074eb.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240";
     return (
       <Container>
-        <Header style={styles.headertyles}>
+        {this.state.loginData == null ?<Header style={styles.headertyles}>
           <Left style={{marginLeft:20}}>
             {/*<Thumbnail square source={{uri: uri}} />*/}
           </Left>
           <Body style={{marginLeft:55}}>
-            <Button iconLeft >
+            <Button iconLeft onPress={() => this.onPressSelect()}>
               <Icon name='log-in' />
               <Text style={{color:'white',fontSize:20,marginRight:10}} note>请登录</Text>
             </Button>
@@ -62,20 +80,21 @@ class task extends Component {
           <Right>
           </Right>
         </Header>
-        {/*<Header style={styles.headertyles}>*/}
-        {/*  <Left style={{marginLeft:20}}>*/}
-        {/*    <Thumbnail square source={{uri: uri}} />*/}
-        {/*  </Left>*/}
-        {/*  <Body style={{marginLeft:20}}>*/}
-        {/*    <Text style={{color:'white'}}>NativeBase</Text>*/}
-        {/*    <Text style={{color:'white'}} note>GeekyAnts</Text>*/}
-        {/*  </Body>*/}
-        {/*  <Right>*/}
-        {/*    <Button iconLeft transparent>*/}
-        {/*      <Icon name='cog' />*/}
-        {/*    </Button>*/}
-        {/*  </Right>*/}
-        {/*</Header>*/}
+          :
+        <Header style={styles.headertyles}>
+          <Left style={{marginLeft:20}}>
+            <Thumbnail square source={{uri: uri}} />
+          </Left>
+          <Body style={{marginLeft:20}}>
+            <Text style={{color:'white'}}>NativeBase</Text>
+            <Text style={{color:'white'}} note>GeekyAnts</Text>
+          </Body>
+          <Right>
+            <Button iconLeft transparent>
+              <Icon name='cog' />
+            </Button>
+          </Right>
+        </Header>}
         <Content>
           <Separator style={{height:10}} />
           <ListItem icon>
@@ -185,7 +204,7 @@ class task extends Component {
               </Badge>
             </Right>
           </ListItem>
-          <ListItem icon onPress={() => this.onPressSelect()}>
+          <ListItem icon>
             <Left>
               <Button style={{ backgroundColor: "#FF9501" }}>
                 <Icon active name="information-circle-outline" />
