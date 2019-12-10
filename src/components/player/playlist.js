@@ -5,12 +5,11 @@ import {VibrancyView, BlurView} from 'react-native-blur'
 import {ActivityIndicator} from '@ant-design/react-native';
 import {Icon} from '../icon'
 import {commonStyle} from './commonStyle'
-
 import * as action from '../actions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as api from '../network/Api';
-import  Normal  from '../widgets/TextTool';
+
+
 const deviceInfo = {
   deviceWidth: Dimensions.get('window').width,
   deviceHeight: Dimensions.get('window').height,
@@ -167,7 +166,7 @@ class PlayerList extends Component {
         mockData=null;
         navigation.goBack();
       }
-    }  
+    }
     showlyics(showLyices,id){
       console.log("=========>>>>id"+id)
       this.setState({
@@ -179,7 +178,7 @@ class PlayerList extends Component {
       // var url =api.getRoot();
       // let urls = url+'/netease/lrc?id='+id
       // //获取歌词
-      // fetch(urls, {  
+      // fetch(urls, {
       //   headers: {
       //       'Content-Type': 'text/plain;charset=UTF-8',
       //   },
@@ -206,7 +205,7 @@ class PlayerList extends Component {
       // .catch(error => {
       //   console.log("========>>网络错误")
       //   console.log(err)
-      // });  
+      // });
     }
     videoError(error) {
         this.showMessageBar('播放器报错啦！')(error)('error')
@@ -378,7 +377,7 @@ class PlayerList extends Component {
                   }
                 </View>
                 {this.renderPlayer()}
-              </View>: <View style={styles.othercontainer}><ActivityIndicator text="正在加载" />             
+              </View>: <View style={styles.othercontainer}><ActivityIndicator text="正在加载" />
               <Button
                   onPress={onPressBack}
                   title="<返回"
@@ -413,7 +412,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     // backgroundColor: 'rgba(0, 0, 0, 0)',
     width: deviceInfo.deviceWidth,
-    height: deviceInfo.deviceHeight/11, 
+    height: deviceInfo.deviceHeight/11,
   },
   navBarContent: {
     marginTop: 25,

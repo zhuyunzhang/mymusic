@@ -1,11 +1,27 @@
 import React, {Component} from 'react';
-import {View, Dimensions, Text, Alert} from 'react-native';
+import {View, Dimensions, Text, DeviceEventEmitter,StyleSheet, Button as Buttons} from 'react-native';
 import {Icon as Icons}  from '@ant-design/react-native';
 import SplashScreen from 'react-native-splash-screen';
 import * as action from '../../actions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Container, Content, Header, Left, Body, Right, Thumbnail,Icon,Button,ListItem,Separator,Badge,Card,CardItem} from 'native-base';
+import {
+  Container,
+  Content,
+  Header,
+  Left,
+  Body,
+  Right,
+  Thumbnail,
+  Icon,
+  Button,
+  ListItem,
+  Separator,
+  Badge,
+  Card,
+  CardItem
+} from 'native-base';
+import Modal from "react-native-modal";
 import local from '../../store/storage';
 
 const {height,width} = Dimensions.get('window');
@@ -16,7 +32,8 @@ class task extends Component {
     this.state = {
       visible: true,
       selected: '',
-      loginData:null
+      loginData:null,
+      isModalVisible:false
     };
     // this.navigation = props.navigation;
   }
@@ -28,13 +45,42 @@ class task extends Component {
     local.get("loginData").then(ret => {
       this.setState({
         loginData:ret
+      },()=>{
+        // console.log(this.state.loginData.account.id)
+        const{actions}=this.props;
+        const params = {
+          uid: this.state.loginData.account.id,
+        }
+        actions.GetUserMusicDan(params);
       })
     }).catch(err => {
       console.log(err) //抛出的错误
     })
+    this.subscription = DeviceEventEmitter.addListener('UPDATE_USER_DATA', this.refreshData)
 
   }
+  refreshData = () => {
+    let _this=this;
+    local.get("loginData").then(ret => {
+      _this.setState({
+        loginData:ret
+      },()=>{
+        // console.log(this.state.loginData.account.id)
+        const{actions}=_this.props;
+        const params = {
+          uid: _this.state.loginData.account.id,
+        }
+        actions.GetUserMusicDan(params);
+      })
+    }).catch(err => {
+      console.log(err) //抛出的错误
+    })
+  };
+  componentWillUnmount() {
 
+    this.subscription.remove();
+
+  };
   static headersFind={
     header: null,
   };
@@ -52,24 +98,34 @@ class task extends Component {
 
 
   onPressSelect(){
-    Alert.alert("=======>>>")
     const{navigation}=this.props;
     if(navigation){
-      navigation.navigate('Login',{
-        refresh: function () {
-          this.init();
-        }
-      })
+      navigation.navigate('Login')
     }
   }
+
+  toggleModal(){
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
+  toggleDefineModal(){
+    local.remove("loginData")
+    this.setState({
+      isModalVisible:!this.state.isModalVisible,
+      loginData:null
+    });
+
+  }
   render() {
-    const {actions, state, navigation} = this.props;
-    const uri = "https://cdn2.jianshu.io/assets/default_avatar/2-9636b13945b9ccf345bc98d0d81074eb.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/240/h/240";
+    const {state} = this.props;
+    const {mdan} = state;
+    var mpmdan="";
+    if(mdan !==null ){
+      mpmdan=mdan.playlist[0].trackCount
+    }
     return (
       <Container>
         {this.state.loginData == null ?<Header style={styles.headertyles}>
           <Left style={{marginLeft:20}}>
-            {/*<Thumbnail square source={{uri: uri}} />*/}
           </Left>
           <Body style={{marginLeft:55}}>
             <Button iconLeft onPress={() => this.onPressSelect()}>
@@ -83,14 +139,14 @@ class task extends Component {
           :
         <Header style={styles.headertyles}>
           <Left style={{marginLeft:20}}>
-            <Thumbnail square source={{uri: uri}} />
+            <Thumbnail square source={{uri: this.state.loginData.profile.avatarUrl}} />
           </Left>
           <Body style={{marginLeft:20}}>
-            <Text style={{color:'white'}}>NativeBase</Text>
-            <Text style={{color:'white'}} note>GeekyAnts</Text>
+            <Text style={{color:'white'}}>{this.state.loginData.profile.nickname}</Text>
+            <Text style={{color:'#919191',fontSize:12}} note>{this.state.loginData.account.userName}</Text>
           </Body>
           <Right>
-            <Button iconLeft transparent>
+            <Button iconLeft transparent onPress={() => this.toggleModal()}>
               <Icon name='cog' />
             </Button>
           </Right>
@@ -173,14 +229,14 @@ class task extends Component {
                 </Body>
               </Left>
             </CardItem>
-            <CardItem>
+            <CardItem button onPress={() => alert("This is Card Body")}>
               <Left>
-                <Button >
-                  <Icon active name="radio" />
+                <Button>
+                  <Icon active name="barcode" />
                 </Button>
                 <View style={{marginLeft:10}}>
                   <Text >我喜欢的音乐</Text>
-                  <Text style={{fontSize:12,color:'red'}}>0首</Text>
+                  <Text style={{fontSize:12,color:'red'}}>{mpmdan}首</Text>
                 </View>
               </Left>
               <Right>
@@ -189,7 +245,7 @@ class task extends Component {
             </CardItem>
           </Card>
           <Separator style={{height:10}} />
-          <ListItem icon>
+          <ListItem icon  onPress={() => this.toggleModal()}>
             <Left>
               <Button style={{ backgroundColor: "#969696" }}>
                 <Icon active name="refresh" />
@@ -217,7 +273,28 @@ class task extends Component {
               <Text style={{color:'#B0B0B0'}}>v1.0.0</Text>
             </Right>
           </ListItem>
-
+          <Modal
+            testID={'modal'}
+            animationIn="slideInLeft"
+            animationOut="slideOutRight"
+            animationInTiming={100}
+            animationOutTiming={500}
+            backdropTransitionInTiming={400}
+            backdropTransitionOutTiming={400}
+            isVisible={this.state.isModalVisible}
+          >
+            <View style={styles.content}>
+              <Text style={styles.contentTitle}>确定退出吗？</Text>
+              <View style={{flexDirection: "row"}}>
+                <View style={{marginRight:20}}>
+                  <Buttons testID={'close-button'} onPress={() => this.toggleDefineModal()} title="确定" />
+                </View>
+                <View style={{marginLeft:20}}>
+                  <Buttons testID={'close-button'} onPress={() => this.toggleModal()} title="取消" />
+                </View>
+              </View>
+            </View>
+          </Modal>
         </Content>
       </Container>
     );
@@ -232,7 +309,9 @@ export default connect(
     actions: bindActionCreators(action.user, dispatch),
   }),
 )(task);
-const styles = {
+
+
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -241,5 +320,17 @@ const styles = {
   },
   headertyles:{
     height:height/7,
-  }
-};
+  },
+  content: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+  },
+  contentTitle: {
+    fontSize: 20,
+    marginBottom: 12,
+  },
+});

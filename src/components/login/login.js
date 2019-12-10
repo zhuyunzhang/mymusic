@@ -1,5 +1,5 @@
 import React, {Component } from 'react';
-import { Dimensions,View,TextInput,TouchableOpacity,Text,StyleSheet,PixelRatio} from 'react-native';
+import { Dimensions,View,TextInput,TouchableOpacity,Text,StyleSheet,PixelRatio,DeviceEventEmitter} from 'react-native';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Fab } from 'native-base';
 import * as action from '../../actions';
 import {connect} from 'react-redux';
@@ -56,7 +56,7 @@ class login extends Component {
           const{navigation}=this.props;
           if(navigation){
             navigation.goBack();
-            navigation.state.params.refresh();
+            DeviceEventEmitter.emit('UPDATE_USER_DATA')
           }
           return Toast.show('登录成功', {
             duration: 1000, // toast显示时长

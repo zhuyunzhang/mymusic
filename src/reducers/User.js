@@ -10,9 +10,10 @@ const initialState = {
   banner:null,
   palydetail:null,
   murl:null,
+  mdan:null,
 };
 export default function user(state = initialState, action = {}) {
-  //SET_MUSIC_URL
+  //SET_USER_MUSIC_DAN
   switch(action.type) {
     case types.USER.SET_LOGIN_GET_TEST:
       return { ...state, single: action.data }
@@ -22,6 +23,8 @@ export default function user(state = initialState, action = {}) {
       return { ...state, palydetail: action.data }
     case types.USER.SET_MUSIC_URL:
       return { ...state, murl: action.data }
+    case types.USER.SET_USER_MUSIC_DAN:
+      return { ...state, mdan: action.data }
     default:
       return state;
   }
