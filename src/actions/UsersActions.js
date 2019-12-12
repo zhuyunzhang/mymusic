@@ -40,6 +40,13 @@ function setGetUserMusicDan(data) {
     data,
   };
 }
+//setGetSongDetail
+function setGetSongDetail(data) {
+  return {
+    type: types.USER.SET_SONG_DETAIL,
+    data,
+  };
+}
 export const GetBannerList = (params) => {
   return (dispatch, getState) => {
     return (async () => {
@@ -155,6 +162,21 @@ export const GetUserMusicDan = (params) => {
         setTimeout(() => dispatch(setGetUserMusicDan(null)), 0);
         const data = await api.GetUserMusicDan(params);
         setTimeout(() => dispatch(setGetUserMusicDan(data)), 0);
+      } catch (e) {
+        console.log('GetUserMusicDan is error: ' + e);
+      }
+    })();
+  };
+};
+//获取歌曲详情
+//GetSongDetail
+export const GetSongDetail = (params) => {
+  return (dispatch, getState) => {
+    return (async () => {
+      try {
+        setTimeout(() => dispatch(setGetSongDetail(null)), 0);
+        const data = await api.GetSongDetail(params);
+        setTimeout(() => dispatch(setGetSongDetail(data)), 0);
       } catch (e) {
         console.log('GetUserMusicDan is error: ' + e);
       }

@@ -46,4 +46,9 @@ export function GetLogin(params,callback) {
 export function GetUserMusicDan(params) {
   return helper.getRequest(`/user/playlist`, params);
 }
+//获取歌曲详情
+export function GetSongDetail(params) {
+  return helper.getRequest(`/song/detail`, params);
+}
+
 

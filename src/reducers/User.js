@@ -11,9 +11,10 @@ const initialState = {
   palydetail:null,
   murl:null,
   mdan:null,
+  dsong:null,
 };
 export default function user(state = initialState, action = {}) {
-  //SET_USER_MUSIC_DAN
+  //SET_SONG_DETAIL
   switch(action.type) {
     case types.USER.SET_LOGIN_GET_TEST:
       return { ...state, single: action.data }
@@ -25,6 +26,8 @@ export default function user(state = initialState, action = {}) {
       return { ...state, murl: action.data }
     case types.USER.SET_USER_MUSIC_DAN:
       return { ...state, mdan: action.data }
+    case types.USER.SET_SONG_DETAIL:
+      return { ...state, dsong: action.data }
     default:
       return state;
   }

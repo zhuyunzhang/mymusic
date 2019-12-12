@@ -6,22 +6,19 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
-  SectionList
+  SectionList,
 } from 'react-native';
 import * as action from '../../actions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {ActivityIndicator} from '@ant-design/react-native';
+import {ActivityIndicator,Modal,Provider} from '@ant-design/react-native';
 import {commonStyle} from '../player/commonStyle'
 import {Icon} from '../icon'
 import  {Normal,Tip,H3}  from '../widgets/TextTool';
 import { Container, Header, Left, Body, Right, Button,Icon as Icons, Title, Fab } from 'native-base';
-import  Avatar from '../widgets/Avatar';
-import  IconWidget from '../widgets/IconWidget';
 
 
 var {height,width} =  Dimensions.get('window');
-var mockData=null;
 class LoveMusic extends Component {
   constructor(props) {
     super(props);
@@ -31,6 +28,7 @@ class LoveMusic extends Component {
       loading:false,
       refreshing: true,
       dataList: [],
+      modalVisible: false
     }
   }
   componentDidMount() {
@@ -69,33 +67,39 @@ class LoveMusic extends Component {
   requestDetail = () => {
   };
   playSong(item){
+    console.log(item)
+    var list=[]
+    list.push(item)
     const { navigation } = this.props;
-    // console.log(item)
-    var list=new Array();
-    list[0]=item;
-    navigation.navigate('PlayList',{list:list})
+    navigation.navigate('Player',{songinfo:JSON.stringify(list),id:0})
   };
   playSongList(list){
-    // const { navigation } = this.props;
-    // navigation.navigate('PlayList',{list:list.songs})
+    const { navigation } = this.props;
+    navigation.navigate('Player',{songinfo:JSON.stringify(list),id:0})
   }
+  perssMenu(){
+    this.setState({
+      modalVisible:true
+    })
+  }
+  onClose = () => {
+    this.setState({
+      modalVisible: false,
+    });
+  };
   scrollToLocation = (params) => {
     console.log("scrollToLocation======>>>"+params)
   };
-  toUserPage = id => {
-    console.log("toUserPage=======>>>"+id);
-    // this.props.navigation.navigate('UserDetail', {id})
-  };
+
   renderHeader = () => {
     return (
       <View style={styles.header}>
-        <Image source={{uri: this.state.musicInfo[0].al.picUrl}} resizeMode="cover" style={[styles.bg, {top: -50, height: width * 0.6 + 50,}]} blurRadius={4} />
+        <Image source={{uri: this.state.musicInfo[0].al.picUrl}} resizeMode="cover" style={[styles.bg, {height: width * 0.2 + 50,}]} blurRadius={4} />
         <View style={{ alignItems: 'center', paddingLeft: 10, backgroundColor: 'transparent'}}>
           <View style={{flex: 1, marginLeft: 15, height: '80%'}}>
             <H3 style={{paddingTop: 15, paddingBottom: 10}} color={commonStyle.white}>我喜欢的音乐</H3>
           </View>
         </View>
-
       </View>
     )
   };
@@ -115,7 +119,9 @@ class LoveMusic extends Component {
             </TouchableOpacity>
           </View>
           <View style={{width: 60, flexDirection: 'row', justifyContent: 'flex-end'}}>
-            <Icon name={'oneIcon|menu_h_o'} size={20} />
+            <TouchableOpacity onPress={() => this.perssMenu()}>
+              <Icon name={'oneIcon|menu_h_o'} size={20} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -129,12 +135,10 @@ class LoveMusic extends Component {
       <View style={{flex: 1, flexDirection: 'row',alignItems: 'center', height: '100%', marginLeft: 10, paddingRight: 10, borderBottomWidth: 1, borderColor: '#F0F0F0'}} >
         <Text>播放全部</Text>
         <Normal title={`（共${this.state.musicInfo.length}首）`} />
-        <View style={{flex: 1}} />
-        <Icon name={'oneIcon|menu_h_o'} size={20} />
       </View>
     </View>
   );
-  scrollToIndex = (params) => {   // flatlist滚到顶部
+  scrollToIndex = (params) => {
     alert(JSON.stringify(params))
   };
 
@@ -166,6 +170,21 @@ class LoveMusic extends Component {
           stickySectionHeadersEnabled
           scrollToLocation={this.scrollToLocation}
         />
+        <Provider>
+          <Modal
+            popup
+            visible={this.state.modalVisible}
+            animationType="slide-up"
+            maskClosable
+            onClose={this.onClose}
+            closable={true}
+          >
+            <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
+              <Text style={{ textAlign: 'center' }}>Content...</Text>
+              <Text style={{ textAlign: 'center' }}>Content...</Text>
+            </View>
+          </Modal>
+        </Provider>
       </Container>:<View style={styles.othercontainer}><ActivityIndicator text="正在加载" /></View>
     );
   }
