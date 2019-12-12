@@ -95,15 +95,18 @@ class task extends Component {
   onChange = value => {
     this.setState({value});
   }
-
-
   onPressSelect(){
     const{navigation}=this.props;
     if(navigation){
       navigation.navigate('Login')
     }
   }
-
+  pressLoveMusic(mid){
+    const{navigation}=this.props;
+    if(navigation){
+      navigation.navigate('LoveMusic',{id:mid})
+    }
+  }
   toggleModal(){
     this.setState({ isModalVisible: !this.state.isModalVisible });
   }
@@ -119,8 +122,10 @@ class task extends Component {
     const {state} = this.props;
     const {mdan} = state;
     var mpmdan="";
+    var mid=0;
     if(mdan !==null ){
       mpmdan=mdan.playlist[0].trackCount
+      mid=mdan.playlist[0].id
     }
     return (
       <Container>
@@ -229,7 +234,7 @@ class task extends Component {
                 </Body>
               </Left>
             </CardItem>
-            <CardItem button onPress={() => alert("This is Card Body")}>
+            <CardItem button onPress={() => this.pressLoveMusic(mid)}>
               <Left>
                 <Button>
                   <Icon active name="barcode" />

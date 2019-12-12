@@ -116,9 +116,18 @@ class deal extends Component {
   }
 
   onPressSongSheet(id){
-    const{navigation}=this.props;
+    const{navigation,actions}=this.props;
     if(navigation){
-      navigation.navigate('Player',{songid:id,id:1})
+      const params = {
+        id: id,
+      }
+      actions.GetPlaylistdetail( params,(succecd,data)=>{
+        var musicInfo=data.playlist.tracks;
+        navigation.navigate('Player',{songinfo:JSON.stringify(musicInfo),id:0})
+        if(!succecd){
+          message.error(data)
+        }
+      });
     }
   }
 

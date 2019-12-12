@@ -6,6 +6,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 // 引入页面组件
 import ScreenBottomTab from './Views';
 import Player from './components/player/player';
+import LoveMusic from './components/player/lovemusic';
 import Login from './components/login/login';
 import Register from './components/login/register';
 
@@ -47,6 +48,7 @@ const AppNavigator = StackModalNavigator({
   Player: {screen: Player},
   Login: {screen: Login},
   Register: {screen: Register},
+  LoveMusic: {screen: LoveMusic},
 
   //下面几个配置的是测试Navigator不同使用场景用，只需要tab的话，只要ScreenBottomTab: ScreenBottomTab即可
 });

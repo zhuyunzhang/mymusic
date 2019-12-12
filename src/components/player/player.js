@@ -19,11 +19,9 @@ import {VibrancyView, BlurView} from 'react-native-blur'
 import {ActivityIndicator} from '@ant-design/react-native';
 import {Icon} from '../icon'
 import {commonStyle} from './commonStyle';
-
 import * as action from '../../actions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import * as api from '../../network/Api';
 const deviceInfo = {
   deviceWidth: Dimensions.get('window').width,
   deviceHeight: Dimensions.get('window').height,
@@ -65,9 +63,6 @@ class Player extends Component {
     static navigationOptions = {
         header:null,
         gesturesEnabled: false,
-        // headerStyle: {
-        //     backgroundColor: 'red'
-        // },
     };
     spining() {
         if (this.rotation) {
@@ -111,38 +106,39 @@ class Player extends Component {
     // }
     componentWillMount() {
       const {actions} = this.props;
-        var id=this.props.navigation.state.params.songid;
-        const params = {
-          id: id,
-        }
-
-        actions.GetPlaylistdetail( params,(succecd,data)=>{
-
-          console.log(data)
-
-          // this.setState({
-          //   musicInfo:data.playlist.tracks,
-          // })
+        var songinfo=this.props.navigation.state.params.songinfo;
+        var index=this.props.navigation.state.params.id;
+        this.setState({
+          musicInfo:JSON.parse(songinfo),
+        }, () => {
+          this.spin();
+          const params = {
+            id: this.state.musicInfo[index].id,
+          }
+          actions.GetMusicUrl(params);
+          // mockData=this.state.musicInfo;
+          // showlyics=this.state.showlyic
           this.setState({
-            musicInfo:data.playlist.tracks,
-          }, () => {
-            this.spin();
-            const params = {
-              id: this.state.musicInfo[0].id,
-            }
-            actions.GetMusicUrl(params);
-            // mockData=this.state.musicInfo;
-            // showlyics=this.state.showlyic
-            this.setState({
-              loading:false
-            })
-
+            loading:false
           })
-            if(!succecd){
-                message.error(data)
-            }
-        });
-      // if(state.palydetail !==null){
+        })
+        // const params = {
+        //   id: id,
+        // }
+
+      //   actions.GetPlaylistdetail( params,(succecd,data)=>{
+      //
+      //     console.log(data)
+      //
+      //     // this.setState({
+      //     //   musicInfo:data.playlist.tracks,
+      //     // })
+      //
+      //       if(!succecd){
+      //           message.error(data)
+      //       }
+      //   });
+      // // if(state.palydetail !==null){
 
       // }
 
