@@ -15,7 +15,7 @@ import {ActivityIndicator,Modal,Provider} from '@ant-design/react-native';
 import {commonStyle} from '../player/commonStyle'
 import {Icon} from '../icon'
 import  {Normal,Tip,H3}  from '../widgets/TextTool';
-import { Container, Header, Left, Body, Right, Button,Icon as Icons, Title, Fab } from 'native-base';
+import { Container, Header, Left, Body, Right, Button,Icon as Icons,Content, Card, CardItem,Thumbnail  } from 'native-base';
 
 
 var {height,width} =  Dimensions.get('window');
@@ -28,7 +28,8 @@ class LoveMusic extends Component {
       loading:false,
       refreshing: true,
       dataList: [],
-      modalVisible: false
+      modalVisible: false,
+      songdetail:null,
     }
   }
   componentDidMount() {
@@ -67,7 +68,6 @@ class LoveMusic extends Component {
   requestDetail = () => {
   };
   playSong(item){
-    console.log(item)
     var list=[]
     list.push(item)
     const { navigation } = this.props;
@@ -77,8 +77,10 @@ class LoveMusic extends Component {
     const { navigation } = this.props;
     navigation.navigate('Player',{songinfo:JSON.stringify(list),id:0})
   }
-  perssMenu(){
+  perssMenu(item){
+    console.log(item)
     this.setState({
+      songdetail:item,
       modalVisible:true
     })
   }
@@ -119,7 +121,7 @@ class LoveMusic extends Component {
             </TouchableOpacity>
           </View>
           <View style={{width: 60, flexDirection: 'row', justifyContent: 'flex-end'}}>
-            <TouchableOpacity onPress={() => this.perssMenu()}>
+            <TouchableOpacity onPress={() => this.perssMenu(item)}>
               <Icon name={'oneIcon|menu_h_o'} size={20} />
             </TouchableOpacity>
           </View>
@@ -179,10 +181,40 @@ class LoveMusic extends Component {
             onClose={this.onClose}
             closable={true}
           >
-            <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
-              <Text style={{ textAlign: 'center' }}>Content...</Text>
-              <Text style={{ textAlign: 'center' }}>Content...</Text>
-            </View>
+            {this.state.songdetail !=null? <Content>
+              <Card>
+                <CardItem header bordered>
+                  <Left>
+                    <Thumbnail source={{uri: this.state.songdetail.al.picUrl}}/>
+                    <Body>
+                      <Text>{this.state.songdetail.al.name}</Text>
+                      <Text note>{new Date(this.state.songdetail.publishTime).toLocaleDateString()}</Text>
+                    </Body>
+                  </Left>
+                </CardItem>
+                <CardItem button onPress={() => this.playSong(this.state.songdetail)}>
+                  <Icons active name="play-circle" />
+                  <Text>音乐播放</Text>
+                </CardItem>
+                <CardItem>
+                  <Icons active name="fastforward" />
+                  <Text>下一首播放</Text>
+                </CardItem>
+                <CardItem>
+                  <Icons active name="shuffle" />
+                  <Text>删除收藏</Text>
+                </CardItem>
+                <CardItem>
+                  <Icons active name="microphone" />
+                  <Text>演唱者：{this.state.songdetail.ar[0].name}</Text>
+                </CardItem>
+                <CardItem>
+                  <Icons active name="share" />
+                  <Text>分享音乐</Text>
+                </CardItem>
+              </Card>
+            </Content>
+            :<View style={styles.othercontainer}><ActivityIndicator text="正在加载" /></View>}
           </Modal>
         </Provider>
       </Container>:<View style={styles.othercontainer}><ActivityIndicator text="正在加载" /></View>
